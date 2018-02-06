@@ -82,7 +82,6 @@ function searchSpotify() {
     ]).then(function(song) {
       var client = spotifyKeys;
 
-      var songQuery = song.songQuery;
       spotifyKeys.search({ type: "track", query: songQuery, limit: 5 }, function(error, data) {
         if (error) {
           return console.log("Error occurred: " + error);
@@ -111,7 +110,15 @@ function searchMovie() {
         name: "movieQuery"
       },
   ]).then(function(movie) {
-    var movieQuery = movie.movieQuery;
+
+
+    if (movie.movieQuery === "") {
+      var movieQuery = "Mr Nobody"
+    } else {
+      var movieQuery = movie.movieQuery;
+    }
+
+
     request("http://www.omdbapi.com/?t="+movieQuery+"&y=&plot=short&tomatoes=true&apikey=896f9977&r=json", function(error, response, body) {
  		if (!error) {
  		   var json = JSON.parse(body);
