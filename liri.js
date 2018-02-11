@@ -11,6 +11,7 @@ var twitterKeys = new Twitter(keys.twitter);
 
 var fs = require("fs"); // node package for reading/writing files
 var inquirer = require("inquirer"); // node package to use inquirer
+var twitterName = "bballmocc";
 
 // LIRI's first greeting
 console.log(chalk.magentaBright.bold("Hello, I'm LIRI!"));
@@ -26,13 +27,13 @@ function mainMenu() {
         {
           type: "rawlist",
           message: message,
-          choices: ["Look at bballmocc's tweets", "Look up a song on Spotify", "Look up a movie on IMDB", "Do whatever I say", "Nothing, sorry to bother you LIRI"],
+          choices: ["Look at some tweets", "Look up a song on Spotify", "Look up a movie on IMDB", "Do whatever I say", "Nothing, sorry to bother you LIRI"],
           name: "liriCommand"
         },
     ]).then(function(userChoice) {
         var command = userChoice.liriCommand;
-        if (command === "Look at bballmocc's tweets") {
-          console.log(chalk.magentaBright("Here are bballmocc's 5 latest tweets:"));
+        if (command === "Look at some tweets") {
+          console.log(chalk.magentaBright("Here are " + twitterName + "'s 5 latest tweets:"));
           viewTweets();
         }
         if (command === "Look up a song on Spotify") {
@@ -57,7 +58,7 @@ function mainMenu() {
 // twitter function
 function viewTweets() {
   var client = twitterKeys;
-    client.get("statuses/user_timeline", {screen_name: "bballmocc", count: 20}, function(error, tweet, body) {
+    client.get("statuses/user_timeline", {screen_name: twitterName, count: 20}, function(error, tweet, body) {
         if (!error) {
         for (var i = 1; i < 6; i++) {
           console.log(chalk.cyan("Tweet #") + chalk.cyan(i) + chalk.cyan(": ") + tweet[i].text + chalk.cyan("\nPosted on: ") + tweet[i].created_at + "\n");
@@ -81,6 +82,8 @@ function searchSpotify() {
         },
     ]).then(function(song) {
       var client = spotifyKeys;
+      // console.log(song.songQuery);
+      var songQuery = song.songQuery;
 
       spotifyKeys.search({ type: "track", query: songQuery, limit: 5 }, function(error, data) {
         if (error) {
